@@ -18,7 +18,7 @@ def guess_the_number():
         else:
             print("Too high")
             
-    # === Цей рядок буде виконано лише в тому випадку, якщо цикл завершився (після 5 спроб), а число не було вгадано ===
+    # === This line will be executed only if the loop has ended (after 5 attempts) and the number has not been guessed ===
     print("Sorry, you've run out of attempts. The correct number was", correct_number)
 
 
