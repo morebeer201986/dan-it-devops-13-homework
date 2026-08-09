@@ -1,0 +1,32 @@
+groups:
+- name: homework_alerts
+  rules:
+ # 1. Free space < 15%
+  - alert: LowFreeSpace
+    expr: (node_filesystem_avail_bytes{fstype!~"tmpfs|fuse.lxcfs|squashfs|vfat"} / node_filesystem_size_bytes{fstype!~"tmpfs|fuse.lxcfs|squashfs|vfat"} * 100) < 15
+    for: 1m
+    labels:
+      severity: warning
+    annotations:
+      summary: “Disk space is critically low!”
+      description: “Less than 15% of free space remains.”
+
+  # 2. CPU usage > 80%
+  - alert: HighCPUUsage
+    expr: 100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 80
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: “High CPU usage!”
+      description: “The CPU load has exceeded 80%.”
+
+  # 3. At least one of the targets is unavailable
+  - alert: TargetDown
+    expr: up == 0
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: “The Prometheus target is unavailable!”
+      description: "The service {{ $labels.instance }} (job: {{ $labels.job }}) is not availabl."

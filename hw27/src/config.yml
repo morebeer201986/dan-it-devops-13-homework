@@ -1,0 +1,20 @@
+route:
+  receiver: 'telegram_bot'
+  group_by: ['alertname']
+  group_wait: 10s
+  group_interval: 1m
+  repeat_interval: 1h
+
+receivers:
+- name: 'telegram_bot'
+  telegram_configs:
+  - bot_token: '8981597998:AAHAJGhM0jnmnn9ki6_not secure:)'
+    chat_id: confidential information
+    parse_mode: 'HTML'
+    message: |-
+      ALARM!!! <b>{{ .Status | toUpper }}</b> ALARM!!!
+      {{ range .Alerts }}
+      <b>Alert:</b> {{ .Annotations.summary }}
+      <b>Опис:</b> {{ .Annotations.description }}
+      <b>Сервіс:</b> {{ .Labels.instance }}
+      {{ end }}
