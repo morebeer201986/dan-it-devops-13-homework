@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: appka
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/morebeer201986/final-project
+    targetRevision: main
+    path: k8s-manifests
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: danit-app
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
